@@ -93,7 +93,7 @@ namespace ColorRoomManager.Controllers
         {
             bool status = false;
             var checkData = db.ProductColors.Where(x => x.ProductCode == PId && x.IsActive ==true).ToList();
-            //checkData.RemoveAll(x => x.ProductCode == PId);
+            //checkData.Remove(checkData);
             foreach (var item in checkData)
             {
                 db.ProductColors.Remove(item);

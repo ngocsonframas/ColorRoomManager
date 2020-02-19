@@ -36,6 +36,7 @@
                     <select id="colorItem" multiple="multiple" size="6" class="multiselect">
                         @if (Model != null)
                         {
+                            
                             foreach (var item in Model)
                             {
                                 <option value='@item.ColorCode'>@item.ColorName</option>
