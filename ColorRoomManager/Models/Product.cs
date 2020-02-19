@@ -21,6 +21,6 @@ namespace ColorRoomManager.Models
         [StringLength(20)]
         public string CreateBy { get; set; }
 
-        public DateTime? CreateDate { get; set; }
+        public DateTime? CreateTime { get; set; }
     }
 }

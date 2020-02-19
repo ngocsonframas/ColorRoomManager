@@ -135,7 +135,9 @@
     <script type="text/javascript">
 
         //Initialize Select2 Elements
-        $('.select2').select2()        
+        $(function () {
+            $('.select2').select2();
+        });
 
         //Code cho function add new Product
         function ProductAdd() {
@@ -203,7 +205,8 @@
         //Code function Open modal
         var openModalColor = function (Id) {
             var url = '/Product/ProductAddColor/' + Id;
-            var options = { "backdrop": "static", keyboard: true };            
+            var options = { "backdrop": "static", keyboard: true };
+            var options = { "backdrop": "static", keyboard: true };
             $.ajax({
                 type: "GET",
                 url: url,
@@ -225,7 +228,7 @@
             var model = {
                 'arrayId': colorCode,
                 'PId': productCode,
-            }; 
+            };
             $.ajax({
                 type: "POST",
                 url: "@(Url.Action("ProductUpColor", "Product"))",
@@ -246,7 +249,7 @@
                     messages.notify("Error has occured while saving data!", "error");
                     return false;
                 }//End of function error
-            });            
+            });
         }
 
         //Code function edit an Product

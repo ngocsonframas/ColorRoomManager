@@ -1,9 +1,10 @@
 ﻿@using ColorRoomManager.Models;
 @using System.Linq;
- @{ 
-     var lstProductColor = (List<ProductColor>)ViewBag.CheckData;
-     string productCode = TempData["ProductCode"].ToString();
- }
+@{
+    var lstProductColor = (List<ProductColor>)ViewBag.CheckData;
+    string productCode = TempData["ProductCode"].ToString();
+}
+
 
 <div class="modal-content">
     <div class="modal-header">
@@ -53,21 +54,21 @@
                                 {
                                     <option value='@item.ColorCode'>@item.ColorName</option>
                                 }
+
                             }
                         }
                         else
                         {
-                            <option value='0'>No data exist. Please add new color first!</option>
+                            <option value='0'> No data exist. Please add new color first! </option>
                         }
-
 
                     </select>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="ProductUpColor('')">Save changes</button>
+                </div>
             </div>
         }
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="ProductUpColor('')">Save changes</button>
     </div>
 </div>

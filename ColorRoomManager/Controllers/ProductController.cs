@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Mvc;
 using ColorRoomManager.Models;
 using ColorRoomManager.ViewModels;
-
 namespace ColorRoomManager.Controllers
 {
     public class ProductController : Controller
@@ -14,7 +13,7 @@ namespace ColorRoomManager.Controllers
         // GET: Product
         public ActionResult Index()
         {
-            var lst = db.Products.ToList();          
+            var lst = db.Products.ToList();
 
             if (lst.Count > 0)
             {
@@ -27,7 +26,7 @@ namespace ColorRoomManager.Controllers
         public ActionResult ProductViewModels()
         {
             var lstColors = db.Colors.ToList();
-            ProductViewModels vmDemo = new ProductViewModels();            
+            ProductViewModels vmDemo = new ProductViewModels();
             return View(vmDemo);
         }
 
@@ -48,7 +47,7 @@ namespace ColorRoomManager.Controllers
                 product.ProductName = models.ProductName;
                 product.IsActive = models.IsActive;
                 product.CreateBy = User.Identity.Name;
-                product.CreateDate = DateTime.Now;
+                product.CreateTime = DateTime.Now;
 
                 try
                 {
@@ -73,7 +72,6 @@ namespace ColorRoomManager.Controllers
                 return PartialView("/Views/Product/_ProductUp.cshtml", data);
             }
             return View("Index");
-            //return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -89,16 +87,15 @@ namespace ColorRoomManager.Controllers
             var data = db.Colors.ToList();
             if (data != null)
             {
-                return PartialView("/Views/Product/_ProductAddColor.cshtml", data);                
+                return PartialView("/Views/Product/_ProductAddColor.cshtml", data);
             }
             return View("Index");
-            //return RedirectToAction("Index");
         }
 
         public JsonResult ProductUpColor(object arrayId, string PId)
         {
             bool status = false;
-            var checkData = db.ProductColors.Where(x => x.ProductCode == PId && x.IsActive ==true).ToList();
+            var checkData = db.ProductColors.Where(x => x.ProductCode == PId && x.IsActive == true).ToList();
             foreach (var item in checkData)
             {
                 db.ProductColors.Remove(item);
@@ -129,6 +126,16 @@ namespace ColorRoomManager.Controllers
                 ex.ToString();
             }
             return Json(status, JsonRequestBehavior.AllowGet);
+        } 
+        [HttpGet]
+        public ActionResult ProductGetColor(string Id)
+        {
+            var data = db.Products.FirstOrDefault(x => x.ProductCode == Id);
+            if (data != null)
+            {
+                return PartialView("/Views/Product/_ProductAddColor.cshtml", data);
+            }
+            return View("Index");
         }
 
         public JsonResult ProductUp(Product models)
@@ -142,7 +149,7 @@ namespace ColorRoomManager.Controllers
                     data.ProductName = models.ProductName;
                     data.IsActive = models.IsActive;
                     data.CreateBy = User.Identity.Name;
-                    data.CreateDate = DateTime.Now;
+                    data.CreateTime = DateTime.Now;
 
                     try
                     {
