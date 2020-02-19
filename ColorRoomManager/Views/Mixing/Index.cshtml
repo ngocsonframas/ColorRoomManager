@@ -1,0 +1,347 @@
+﻿@using ColorRoomManager.Models;
+@{
+    ViewBag.Title = "MIXING ROOM";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var lstOperator = new List<Operator>();
+    var lstProduct = new List<Product>();
+    var lstColor = new List<Color>();
+    var lstStep = new List<Step>();
+    var lstMachine = new List<Machine>();
+    var lstMaterial = new List<Material>();
+
+    if (ViewBag.ListOperator.Count > 0)
+    {
+        lstOperator = ViewBag.ListOperator;
+    }
+    if (ViewBag.ListProduct.Count > 0)
+    {
+        lstProduct = ViewBag.ListProduct;
+    }
+    if (ViewBag.ListColor.Count > 0)
+    {
+        lstColor = ViewBag.ListColor;
+    }
+    if (ViewBag.ListStep.Count > 0)
+    {
+        lstStep = ViewBag.ListStep;
+    }
+    if (ViewBag.ListMachine.Count > 0)
+    {
+        lstMachine = ViewBag.ListMachine;
+    } 
+    if (ViewBag.ListMaterial.Count > 0)
+    {
+        lstMaterial = ViewBag.ListMaterial;
+    }
+
+}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            <strong> MIXING COLOR</strong>
+            <small>FVN</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">MIX</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-wrench"></i>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#">Action</a></li>
+                                    <li><a href="#">Another action</a></li>
+                                    <li><a href="#">Something else here</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">Separated link</a></li>
+                                </ul>
+                            </div>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Shift <code>(*)</code></label>
+                                    <select class="form-control" id="shift">
+                                        <option value="x">Ca làm việc 1(X)</option>
+                                        <option value="y">Ca làm việc 2(Y)</option>
+                                        <option value="z">Ca làm việc 3(Z)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Operator<code>(*)</code></label>
+                                    <select class="form-control select2" id="operator" data-placeholder="Chọn trưởng ca">
+                                        <option value=""></option>
+                                        @if (lstOperator.Count > 0)
+                                        {
+                                            foreach (var item in lstOperator)
+                                            {
+                                                <option value="@item.OperatorCode">@item.OperatorName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Product<code>(*)</code></label>
+                                    <select class="form-control select2" id="product" data-placeholder="Chọn một sản phẩm">
+                                        <option value=""></option>
+                                        @if (lstProduct.Count > 0)
+                                        {
+                                            foreach (var item in lstProduct)
+                                            {
+                                                <option value="@item.ProductCode">@item.ProductName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Color Code (Color Name)<code>(*)</code></label>
+                                    <select class="form-control select2" id="colorCode" data-placeholder="Chọn một mã màu">
+                                        <option value=""></option>
+                                        @if (lstColor.Count > 0)
+                                        {
+                                            foreach (var item in lstColor)
+                                            {
+                                             <option value="@item.ColorCode">@item.ColorCode (@item.ColorName)</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Material Type</label>
+                                    <select class="form-control select2" id="colorCode" data-placeholder="Chọn loại nguyên liệu">
+                                        <option value=""></option>
+                                        @if (lstMaterial.Count > 0)
+                                        {
+                                            foreach (var item in lstMaterial)
+                                            {
+                                                <option value="@item.MaterialCode">@item.MaterialName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Step<code>(*)</code></label>
+                                    <select class="form-control select2" id="step" data-placeholder="Chọn bước">
+                                        <option value=""></option>>
+                                        @if (lstStep.Count > 0)
+                                        {
+                                            foreach (var item in lstStep)
+                                            {
+                                                <option value="@item.StepCode">@item.StepName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Machine<code>(*)</code></label>
+                                    <select class="form-control select2" id="machine" data-placeholder="Chọn máy">
+                                        <option value=""></option>
+                                        @if (lstMachine.Count > 0)
+                                        {
+                                            foreach (var item in lstMachine)
+                                            {
+                                                <option value="@item.Id">@item.MachineName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Raw Material(Kg)<code>(*)</code></label>
+                                    <input type="text" id="rawMaterial" name="RawMaterial" class="form-control changeInput" readonly />
+                                </div>
+                                <div class="form-group">
+                                    <label>Recycling Amount(kg)<code>(*)</code></label>
+                                    <input type="number" id="recyclingAmount" name="RecyclingAmount" class="form-control changeInput" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Total Material(Kg)</label>
+                                    <input type="number" id="totalMaterial" name="TotalMaterial" class="form-control" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <a class="btn btn-lg btn-primary" onclick="Scales()">
+                                    <i class="fa fa-barcode"></i> Print
+                                </a>
+                            </div>
+                            <div class="col-md-2">
+                                <a class="btn btn-lg btn-danger" onclick="Reset()">
+                                    <i class="fa fa-repeat"></i> Reset
+                                </a>
+                            </div>
+                            <div class="col-md-2">
+                                <a class="btn btn-lg btn-success" onclick="Save()">
+                                    <i class="fa fa-save"></i> Save
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            //Call js select2
+            $(".select2").select2();
+
+            //onchange event for input
+            $(".changeInput:input").bind('keyup mouseup', function () {
+                var material = $("#rawMaterial").val();
+                var recyclingAmount = $("#recyclingAmount").val();
+                if (material == "" || recyclingAmount == "") {
+                    return false;
+                }
+                else {
+                    var totalMaterial = parseFloat(material) + parseFloat(recyclingAmount);
+                    $("#totalMaterial").val(totalMaterial);
+                }
+            });
+
+            @*$('#colorCode').on('select2:select', function (e) {
+                var data = e.params.data;
+                $.ajax({
+                type: "POST",
+                url: "@(Url.Action("ColorNameByCode", "Mixing"))",
+                content: "application/json; charset =utf-8",
+                    dataType: "json",
+                    data: { colorCode: data.id },
+                    success: function (d) {
+                        $("#colorName").val(d.ColorName);
+                  },
+                error: function (xhr, textStatus, errorThrown) {
+                   alert("Đã xảy ra lỗi trong quá trình thực thi");
+                    return false;
+                }
+            });
+        });*@
+        });
+
+         $('#product').on('select2:select', function (e) {
+                var data = e.params.data;
+                $.ajax({
+                type: "POST",
+                url: "@(Url.Action("ColorCodeByProduct", "Mixing"))",
+                content: "application/json; charset =utf-8",
+                    dataType: "json",
+                    data: { prodCode: data.id },
+                    success: function (d) {
+                         $("#colorCode.select2").html("");
+                        $.each(d, function (key, value) {
+                            $('#colorCode.select2').append(
+                            '<option value="' + value["ColorCode"] + '">' + value["ColorCode"] + "(" + value["ColorName"]+")" +  '</option>'
+                            );
+                    });
+
+                  },
+                error: function (xhr, textStatus, errorThrown) {
+                   alert("Đã xảy ra lỗi trong quá trình thực thi");
+                    return false;
+                }
+            });
+             });
+
+        function Reset() {
+            //$('#shift').prop('selectedIndex', 0);
+            //$("#operator").select2('val', 'All');
+            //$("#product").select2('val', 'All');
+            //$("#colorCode").select2('val', 'All');
+            //$("#step").select2('val', 'All');
+            //$("#machine").select2('val', 'All');
+            //$("#colorName").val('');
+            //$("#rawMaterial").val('');
+            //$("#recyclingAmount").val('');
+            //$("#totalMaterial").val('');
+        };
+
+        function Save() {
+            var shift = $("#shift :selected").val();
+            var operator = $("#operator.select2 option:selected").val();
+            var product = $("#product.select2 option:selected").val();
+            var colorCode = $("#colorCode.select2 option:selected").val();
+            var step = $("#step.select2 option:selected").val();
+            var colorName = $("#colorName").val();
+            var rawMaterial = $("#rawMaterial").val();
+            var recyclingAmount = $("#recyclingAmount").val();
+            var totalMaterial = $("#totalMaterial").val();
+            if (shift == "" || operator == "" || product == "" || colorCode == "" || step == "") {
+                messages.notify("Vui lòng điền đầy đủ thông tin các trường có dấu (*)", "error");
+                return false;
+            }
+            else {
+               $.ajax({
+                type: "POST",
+                url: "@(Url.Action("MixingAdd", "Mixing"))",
+                content: "application/json; charset =utf-8",
+                dataType: "json",
+                data: model,
+                success: function (data) {
+                    if (data) {
+                        messages.notify("CommandsCompletedSuccessfully", "success");
+                        window.location.reload();
+                    }
+                },
+                    error: function(xhr, textStatus, errorThrown) {
+                      messages.notify("OopsSomethingWentWrong", "error");
+                            return false;
+                        }
+              });
+            }
+        };
+
+        @*$("#rawMaterial").focus(function () {
+
+            $.ajax({
+                type: "GET",
+                url: "@(Url.Action("Scales", "Mixing"))",
+                success: function (data) {
+                    console.log(data);
+                    $("#rawMaterial").val(data);
+                  },
+                error: function (xhr, textStatus, errorThrown) {
+                   alert("Đã xảy ra lỗi trong quá trình thực thi");
+                    return false;
+                }
+            });
+        });*@
+
+        function Scales() {
+            $.ajax({
+                type: "GET",
+                url: "@(Url.Action("Scales", "Mixing"))",
+                success: function (data) {
+                    console.log(data);
+                    $("#rawMaterial").val(data);
+                  },
+                error: function (xhr, textStatus, errorThrown) {
+                   alert("Đã xảy ra lỗi trong quá trình thực thi");
+                    return false;
+                }
+            });
+        }
+    </script>
+}

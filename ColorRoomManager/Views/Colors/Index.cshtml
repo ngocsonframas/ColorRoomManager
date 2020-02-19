@@ -1,0 +1,290 @@
+﻿@model IEnumerable<ColorRoomManager.Models.Color>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    int i = 1;
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            <strong>COLORS</strong>
+            <small>FVN</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <!-- Small boxes (Stat box) -->
+        <p>
+            @*@Html.ActionLink("Create New", "CreateColor")*@
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#color-add">
+                Create Color
+            </button>
+        </p>
+        @*<table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ColorCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ColorName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreateBy)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreateTime)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ColorCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ColorName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ColorName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ColorName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProductCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IsActive)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreateBy)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreateTime)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.ColorCode }) |
+                                @Html.ActionLink("Details", "Details", new { id = item.ColorCode }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.ColorCode })
+                            </td>
+                        </tr>
+
+                    }
+
+                }
+
+            </table>*@
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Latest Orders</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            <table class="table no-margin">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Color Code</th>
+                                        <th>Color Name</th>
+                                        <th>Status</th>
+                                        <th>Chỉnh sửa</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null)
+                                    {
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td><a href="#">@i</a></td>
+                                                <td>@item.ColorCode</td>
+                                                <td>@item.ColorName</td>
+                                                <td>
+                                                    <span class="label label-@(item.IsActive == true ? "success":"danger")">
+                                                        @(item.IsActive == true ? "Hoạt động" : "Tạm khóa")
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <a class="fa fa-edit btn-primary btn-sm" href="#" onclick="openModal('@item.ColorCode')"></a>
+                                                    <a class="fa fa-trash btn-danger btn-sm" href="@Url.Action("ColorDel/"+ item.ColorCode,"Colors")" onclick="return confirm('Are you sure?')"> </a>
+                                                </td>
+                                            </tr>
+                                            i++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="4">
+                                                <div class="alert alert-warning alert-dismissible">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                                    <h4><i class="icon fa fa-warning"></i> Thông báo!</h4>
+                                                    <h3> Không tìm thấy dữ liệu !</h3>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix">
+                    </div>
+                    <!-- /.box-footer -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+@Html.Partial("_ColorAdd")
+
+<!-- #region Edit MES WorkLoad -->
+<div id='modal-edit' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='ContentModal'></div>
+        </div>
+    </div>
+</div>
+<!-- #endregion -->
+
+@section scripts {
+    <script type="text/javascript">
+        function ColorAdd() {
+        var colorCode = $("#ColorCode").val();
+        var colorName = $("#ColorName").val();
+        var isActive =  $("#isActive").is(":checked");
+        var model = {
+            'ColorCode':colorCode,
+            'ColorName':colorName,
+            'IsActive': isActive,
+        };
+            if (colorCode == null || colorCode == "" || colorName == null || colorName == "") {
+                messages.notify("Vui lòng điền đầy đủ các trường có(*)", "error");
+            return false;
+        }
+        else {
+            $.ajax({
+            type: "POST",
+                url: "@(Url.Action("ColorAdd", "Colors"))",
+             content: "application/json; charset =utf-8",
+            dataType: "json",
+                data: model,
+                success: function (data) {
+                    if (data == 1) {
+                        messages.notify("Thêm màu thành công!", "success");
+                        window.location.reload();
+                        }
+                    if (data == -1) {
+                     messages.notify("Dữ liệu đã tồn tại!", "error");
+                     }
+                    if (data == 0) {
+                    messages.notify("Đã xảy ra lỗi trong quá trình lưu dữ liệu!", "error");
+                    return false;
+                    }
+                  },
+                    error: function (xhr, textStatus, errorThrown) {
+                    messages.notify("Đã xảy ra lỗi trong quá trình lưu dữ liệu!", "error");
+                            return false;
+                        }
+                    });
+        }
+        }
+
+        var openModal = function (Id) {
+              var url = '/Colors/ColorUp/' + Id;
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    $('#ContentModal').html(data);
+                    $('#modal-edit').modal(options);
+                    $('#modal-edit').modal('show');
+                },
+                error: function (e) {
+                    return false;
+                }
+            });
+        }
+
+        function ColorUp(colorCode) {
+        var colorName = $("#ColorNameUp").val();
+        var isActive =  $("#isActiveUp").is(":checked");
+        var model = {
+            'ColorCode':colorCode,
+            'ColorName':colorName,
+            'IsActive': isActive,
+        };
+            if (colorCode == null || colorCode == "" || colorName == null || colorName == "") {
+                messages.notify("Vui lòng điền đầy đủ các trường có(*)", "error");
+            return false;
+        }
+        else {
+            $.ajax({
+            type: "POST",
+            url:"@(Url.Action("ColorUp", "Colors"))",
+             content: "application/json; charset =utf-8",
+            dataType: "json",
+            data: model,
+                success: function (data) {
+                    if (data == 1) {
+                        messages.notify("Thêm màu thành công!", "success");
+                        window.location.reload();
+                        }
+                    if (data == -1) {
+                     messages.notify("Dữ liệu đã tồn tại!", "error");
+                     }
+                    if (data == 0) {
+                    messages.notify("Đã xảy ra lỗi trong quá trình lưu dữ liệu!", "error");
+                    return false;
+                    }
+                  },
+                    error: function (xhr, textStatus, errorThrown) {
+                    messages.notify("Đã xảy ra lỗi trong quá trình lưu dữ liệu!", "error");
+                            return false;
+                        }
+                    });
+        }
+        }
+    </script>
+}

@@ -1,0 +1,296 @@
+﻿@model IEnumerable<ColorRoomManager.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    int i = 1;
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            <strong>PRODUCTS </strong>
+            <small>FVN</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <!-- Small boxes (Stat box) -->
+        <p>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#color-add">
+                Create Product
+            </button>
+        </p>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Latest Orders</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            <table class="table no-margin">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Product Code</th>
+                                        <th>Product Name</th>
+                                        <th>Status</th>
+                                        <th>Chỉnh sửa</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null)
+                                    {
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td><a href="#">@i</a></td>
+                                                <td>@item.ProductCode</td>
+                                                <td>@item.ProductName</td>
+                                                <td>
+                                                    <span class="label label-@(item.IsActive == true ? "success":"danger")">
+                                                        @(item.IsActive == true ? "Hoạt động" : "Tạm khóa")
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <a class="fa fa-cogs btn-primary btn-sm" href="#" onclick="openModalColor('@item.ProductCode')"></a>
+                                                    <a class="fa fa-edit btn-primary btn-sm" href="#" onclick="openModal('@item.ProductCode')"></a>
+                                                    <a class="fa fa-trash btn-danger btn-sm" href="@Url.Action("ProductDel/"+ item.ProductCode,"Product")" onclick="return confirm('Are you sure?')"> </a>
+                                                </td>
+                                            </tr>
+                                            i++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="4">
+                                                <div class="alert alert-warning alert-dismissible">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                                    <h4><i class="icon fa fa-warning"></i> Thông báo!</h4>
+                                                    <h3> Không tìm thấy dữ liệu !</h3>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix">
+                    </div>
+                    <!-- /.box-footer -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+@Html.Partial("_ProductAdd")
+
+<!-- #region Edit Product -->
+<div id='modal-edit' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='ContentModal'></div>
+        </div>
+    </div>
+</div>
+<!-- #endregion -->
+<!-- #region Edit Product -->
+<div id='modal-color' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='ContentModalColor'></div>
+        </div>
+    </div>
+</div>
+<!-- #endregion -->
+
+@section scripts {
+    <script type="text/javascript">
+
+        //Initialize Select2 Elements
+        $('.select2').select2()        
+
+        //Code cho function add new Product
+        function ProductAdd() {
+            var productCode = $("#ProductCode").val();
+            var productName = $("#ProductName").val();
+            var isActive = $("#isActive").is(":checked");
+            var model = {
+                'ProductCode': productCode,
+                'ProductName': productName,
+                'IsActive' : isActive,
+            }; //End of model variable
+
+            if (productCode == null || productCode == "" || productName == null || productName == "") {
+                messages.notify("(*) - Requirement field", "error");
+                return false;
+            } //End of If statement
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: "@(Url.Action("ProductAdd", "Product"))",
+                    content: "application/json; charset =utf-8",
+                    dataType: "json",
+                    data: model,
+                    success: function (data) {
+                        if (data == 1) {
+                            messages.notify("Added an product successful!", "success");
+                            window.location.reload();
+                        } //End if Data == 1
+
+                        if (data == -1) {
+                            messages.notify("Data was existing!", "error");
+                        } //End if Data == -1
+
+                        if (data == 0) {
+                            messages.notify("Error has occured while saving data!", "error");
+                            return false;
+                        } //End if Data == 0
+                    }, //End of success function (data)
+                    error: function (xhr, textStatus, errorThrown) {
+                        messages.notify("Error has occured while saving data!", "error");
+                        return false;
+                    } //End of error function
+                }); //End of ajax
+            } //End of Else statement
+        } //End function ProductAdd
+
+        //Code function Open modal
+        var openModal = function (Id) {
+            var url = '/Product/ProductUp/' + Id;
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    $('#ContentModal').html(data);
+                    $('#modal-edit').modal(options);
+                    $('#modal-edit').modal('show');
+                }, //End function success
+                error: function (e) {
+                    return false;
+                } //End function error
+            }); //End ajax
+        } //End function openModal
+
+        //Code function Open modal
+        var openModalColor = function (Id) {
+            var url = '/Product/ProductAddColor/' + Id;
+            var options = { "backdrop": "static", keyboard: true };            
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    $('#ContentModalColor').html(data);
+                    $('#modal-color').modal(options);
+                    $('#modal-color').modal('show');
+                    $('#ProductCodeUp').val(Id);
+                }, //End function success
+                error: function (e) {
+                    return false;
+                } //End function error
+            }); //End ajax
+        } //End function openModal
+
+        function ProductUpColor(Id) {
+            var productCode = $("#ProductCodeUp").val();
+            var colorCode = $('#colorItem').val();
+            var model = {
+                'arrayId': colorCode,
+                'PId': productCode,
+            }; 
+            $.ajax({
+                type: "POST",
+                url: "@(Url.Action("ProductUpColor", "Product"))",
+                data: model,
+                content: "application/json; charset =utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data == 1) {
+                        messages.notify("Edited an product successfull!", "success");
+                        window.location.reload();
+                    }//End if data == 1
+                    else if (data == 0) {
+                        messages.notify("Error has occured while saving data!", "error");
+                        return false;
+                    }//End if data == 0
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    messages.notify("Error has occured while saving data!", "error");
+                    return false;
+                }//End of function error
+            });            
+        }
+
+        //Code function edit an Product
+        function ProductUp(Id) {
+            var productCode = $("#ProductCodeUp").val();
+            var productName = $("#ProductNameUp").val();
+            var isActive = $("#isActiveUp").is(":checked");
+
+            var model = {
+                'ProductCode': productCode,
+                'ProductName': productName,
+                'IsActive': isActive,
+            }; //End model
+
+            if (productCode == null || productCode == "" || productName == null || productName == "") {
+                messages.notify("(*) - Requirement field", "error");
+                return false;
+            } //End if
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: "@(Url.Action("ProductUp", "Product"))",
+                    content: "application/json; charset =utf-8",
+                    dataType: "json",
+                    data: model,
+                    success: function (data) {
+                        if (data == 1) {
+                            messages.notify("Edited an product successfull!", "success");
+                            window.location.reload();
+                        }//End if data == 1
+                        if (data == -1) {
+                            messages.notify("Data was existing!", "error");
+                        }//End if data == -1
+                        if (data == 0) {
+                            messages.notify("Error has occured while saving data!", "error");
+                            return false;
+                        }//End if data == 0
+                    }, //End function success
+                    error: function (xhr, textStatus, errorThrown) {
+                        messages.notify("Error has occured while saving data!", "error");
+                        return false;
+                    }//End of function error
+                }); //End ajax
+            } //End of else
+        } //End function edit an Product
+    </script>
+}

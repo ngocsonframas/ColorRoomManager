@@ -1,0 +1,31 @@
+﻿<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title">Operator Edit</h4>
+    </div>
+    <div class="modal-body">
+        @if (Model != null)
+        {
+            <div class="form-group">
+                <label>Operator code<code>(*)</code></label>
+                <input type="text" class="form-control" id="OperatorCodeUp" name="OperatorCodeUp" placeholder="Operator code" value="@Model.OperatorCode" readonly>
+            </div>
+            <div class="form-group">
+                <label>Operator name<code>(*)</code></label>
+                <input type="text" class="form-control" id="OperatorNameUp" name="OperatorNameUp" placeholder="Operator name" value="@Model.OperatorName">
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" id="isActiveUp" name="isActiveUp" @(Model.IsActive == true ? "checked" : "")> Active
+                </label>
+            </div>
+        }
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="OperatorUp('@Model.OperatorCode')">Save changes</button>
+    </div>
+</div>
+

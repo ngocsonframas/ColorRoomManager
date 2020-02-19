@@ -1,0 +1,26 @@
+﻿/*#region Commons */
+.hide {
+    display: none;
+}
+
+
+/*#endregion */
+
+/*#region QR CODE */
+#qrcode {
+    width: 120px;
+    height: 120px;
+    margin-top: 15px;
+}
+/*#endregion */
+
+
+/*#region Select-2 */
+.select2-container--default .select2-selection--single {
+    border: 1px solid #d2d6de;
+    border-radius: 0;
+    padding: 6px 12px;
+    height: 34px;
+}
+/*#endregion */
+
