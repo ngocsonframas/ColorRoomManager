@@ -1,9 +1,9 @@
 ﻿@using ColorRoomManager.Models;
-
-@{
-    int i = 1;
-}
-
+@using System.Linq;
+ @{ 
+     var lstProductColor = (List<ProductColor>)ViewBag.CheckData;
+     string productCode = TempData["ProductCode"].ToString();
+ }
 
 <div class="modal-content">
     <div class="modal-header">
@@ -17,7 +17,7 @@
         {
             <div class="form-group">
                 <label>Product code<code>(*)</code></label>
-                <input type="text" class="form-control" id="ProductCodeUp" name="ProductCodeUp" placeholder="Product code" readonly>
+                <input type="text" class="form-control" id="ProductCodeUp" name="ProductCodeUp" value="@productCode" placeholder="Product code" readonly>
             </div>
 
             <div class="form-group">
@@ -28,7 +28,7 @@
                             $('#colorItem').multiselect({
                                 enableFiltering: true,
                                 maxHeight: 400,
-                                buttonWidth: '400px' 
+                                buttonWidth: '400px'
                             });
                         });
                     </script>
@@ -36,11 +36,23 @@
                     <select id="colorItem" multiple="multiple" size="6" class="multiselect">
                         @if (Model != null)
                         {
-                            
                             foreach (var item in Model)
                             {
-                                <option value='@item.ColorCode'>@item.ColorName</option>
-                                i++;
+                                if (lstProductColor != null)
+                                {
+                                    if (lstProductColor.Where(x => x.ColorCode == item.ColorCode).ToList().Count > 0)
+                                    {
+                                        <option selected value='@item.ColorCode'>@item.ColorName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value='@item.ColorCode'>@item.ColorName</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value='@item.ColorCode'>@item.ColorName</option>
+                                }
                             }
                         }
                         else

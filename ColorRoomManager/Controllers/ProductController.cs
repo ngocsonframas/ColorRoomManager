@@ -79,7 +79,13 @@ namespace ColorRoomManager.Controllers
         [HttpGet]
         public ActionResult ProductAddColor(string Id)
         {
-            var checkdata = db.ProductColors.Where(x => x.ProductCode == Id && x.IsActive == true).ToList();
+            var checkData = db.ProductColors.Where(x => x.ProductCode == Id && x.IsActive == true).ToList();
+
+            if (checkData.Count > 0)
+            {
+                ViewBag.CheckData = checkData;
+            }
+            TempData["ProductCode"] = Id;
             var data = db.Colors.ToList();
             if (data != null)
             {
@@ -93,7 +99,6 @@ namespace ColorRoomManager.Controllers
         {
             bool status = false;
             var checkData = db.ProductColors.Where(x => x.ProductCode == PId && x.IsActive ==true).ToList();
-            //checkData.Remove(checkData);
             foreach (var item in checkData)
             {
                 db.ProductColors.Remove(item);
@@ -101,15 +106,18 @@ namespace ColorRoomManager.Controllers
             }
             ProductColor objColor;
             string[] res = arrayId as string[];
-            foreach (var item in res)
+            if (res != null)
             {
-                objColor = new ProductColor();
-                objColor.ProductCode = PId;
-                objColor.ColorCode = item;
-                objColor.IsActive = true;
-                objColor.CreateBy = User.Identity.Name;
-                objColor.CreateTime = DateTime.Now;
-                db.ProductColors.Add(objColor);
+                foreach (var item in res)
+                {
+                    objColor = new ProductColor();
+                    objColor.ProductCode = PId;
+                    objColor.ColorCode = item;
+                    objColor.IsActive = true;
+                    objColor.CreateBy = User.Identity.Name;
+                    objColor.CreateTime = DateTime.Now;
+                    db.ProductColors.Add(objColor);
+                }
             }
             try
             {
