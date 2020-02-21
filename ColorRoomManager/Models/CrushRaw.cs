@@ -6,10 +6,10 @@ namespace ColorRoomManager.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("MixRaw")]
-    public partial class MixRaw
+    [Table("CrushRaw")]
+    public partial class CrushRaw
     {
-        public int MixRawId { get; set; }
+        public int CrushRawId { get; set; }
 
         [StringLength(50)]
         public string ShiftName { get; set; }
@@ -29,9 +29,14 @@ namespace ColorRoomManager.Models
         [StringLength(150)]
         public string StepName { get; set; }
 
+          [StringLength(100)]
+        public string LossTypeName { get; set; }
+
         public double? WeightMix { get; set; }
 
         public double? WeightRecycle { get; set; }
+
+        public int? MixRawId { get; set; }
 
         public double? WeightMaterial { get; set; }
 

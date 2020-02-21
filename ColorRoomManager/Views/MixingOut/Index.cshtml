@@ -1,0 +1,168 @@
+﻿@using ColorRoomManager.Models;
+@{
+    ViewBag.Title = "MIXING ROOM";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var lstMixRaw = (List<MixRaw>)ViewBag.MixRaw;
+
+}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            <strong> MIXING COLOR</strong>
+            <small>FVN</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">MIX</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Weight Runner(Kg)<code>(*)</code></label>
+                                    <input type="number" id="WeightRunner" name="WeightRunner" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Weight Defect(kg)<code>(*)</code></label>
+                                    <input type="number" id="WeightDefect" name="WeightDefect" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Weight Black Dot(Kg)<code>(*)</code></label>
+                                    <input type="number" id="WeightBlackDot" name="WeightBlackDot" class="form-control" />
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <a class="btn btn-lg btn-primary">
+                                            <i class="fa fa-barcode"></i> Print
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a class="btn btn-lg btn-danger" onclick="ResetForm(event)">
+                                            <i class="fa fa-repeat"></i> Reset
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a class="btn btn-lg btn-success" onclick="Save(event)">
+                                            <i class="fa fa-save"></i> Save
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Weight Contamination(Kg)<code>(*)</code></label>
+                                    <input type="number" id="WeighContamination" name="WeighContamination" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Weight Recycle(Kg)<code>(*)</code></label>
+                                    <input type="number" id="WeightRecycle" name="WeightRecycle" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Weight Cookie(Kg)<code>(*)</code></label>
+                                    <input type="number" id="WeightCookie" name="WeightCookie" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label>QR CODE<code>(*)</code></label>
+                                    <select class="form-control select2" id="MixRawId" data-placeholder="Chọn mã QR CODE">
+                                        <option value=""></option>>
+                                        @if (lstMixRaw.Count > 0)
+                                        {
+                                            foreach (var item in lstMixRaw)
+                                            {
+                                                <option value="@item.MixRawId">@item.MixBacode</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).on("wheel", "input[type=number]", function (e) {
+                $(this).blur();
+        });
+
+        $(function () {
+            //Call js select2
+            $(".select2").select2();
+        });
+
+        function ResetForm(e) {
+            e.preventDefault();
+            $("#WeightRunner").val('');
+          $("#WeightDefect").val('');
+          $("#WeightBlackDot").val('');
+          $("#WeighContamination").val('');
+          $("#WeightRecycle").val('');
+          $("#WeightCookie").val('');
+        };
+
+        function Save(e) {
+             e.preventDefault();
+            var weightRunner = $("#WeightRunner").val();
+            var weightDefect = $("#WeightDefect").val();
+            var weightBlackDot = $("#WeightBlackDot").val();
+            var weighContamination = $("#WeighContamination").val();
+            var weightRecycle = $("#WeightRecycle").val();
+            var weightCookie = $("#WeightCookie").val();
+            var mixRawId = $("#MixRawId.select2 option:selected").val();
+            if (weightRunner == "" || weightDefect == "" || weightBlackDot == ""
+                || weighContamination == "" || weightRecycle == "" || weightCookie == ""
+                || mixRawId == "") {
+                messages.notify("Vui lòng điền đầy đủ thông tin các trường có dấu (*)", "error");
+                return false;
+            }
+            else {
+                var model ={
+                    'WeightRunner': weightRunner,
+                    'WeightDefect': weightDefect,
+                    'WeightBlackDot': weightBlackDot,
+                    'WeighContamination': weighContamination,
+                    'WeightRecycle': weightRecycle,
+                    'WeightCookie': weightCookie,
+                    'MixRawId': mixRawId,
+                }
+
+               $.ajax({
+                type: "POST",
+                url: "@(Url.Action("MixingOutAdd", "MixingOut"))",
+                content: "application/json; charset =utf-8",
+                dataType: "json",
+                data: model,
+                success: function (data) {
+                    if (data) {
+                        messages.notify("CommandsCompletedSuccessfully", "success");
+                    }
+                },
+                    error: function(xhr, textStatus, errorThrown) {
+                      messages.notify("OopsSomethingWentWrong", "error");
+                            return false;
+                        }
+              });
+            }
+        };
+    </script>
+}

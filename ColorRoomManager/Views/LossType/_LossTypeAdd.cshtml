@@ -1,17 +1,16 @@
-﻿
-<div class="modal fade" id="machine-add" style="display: none;">
+﻿<div class="modal fade" id="lossType-add" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
-                <h4 class="modal-title">Tạo màu</h4>
+                <h4 class="modal-title">Create step</h4>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Machine name<code>(*)</code></label>
-                    <input type="text" class="form-control" id="MachineName" name="MachineName" placeholder="Machine name">
+                    <label>Loss type name<code>(*)</code></label>
+                    <input type="text" class="form-control" id="lossTypeName" name="lossTypeName" placeholder="Loss type name">
                 </div>
                 <div class="checkbox">
                     <label>
@@ -21,11 +20,10 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="MachineAdd(event)">Save changes</button>
+                <button type="button" class="btn btn-primary" onclick="LossTypeAdd()">Save changes</button>
             </div>
         </div>
         <!-- /.modal-content -->
     </div>
     <!-- /.modal-dialog -->
 </div>
-

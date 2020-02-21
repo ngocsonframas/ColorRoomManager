@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ColorRoomManager.Models.Product>
+﻿@model IEnumerable<ColorRoomManager.Models.LossType>
 
 @{
     ViewBag.Title = "Index";
@@ -14,7 +14,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            <strong>PRODUCTS </strong>
+            <strong>LOSS TYPE</strong>
             <small>FVN</small>
         </h1>
         <ol class="breadcrumb">
@@ -27,8 +27,8 @@
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <p>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#color-add">
-                Create Product
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#lossType-add">
+                Create LossType
             </button>
         </p>
 
@@ -51,8 +51,7 @@
                                 <thead>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Product Code</th>
-                                        <th>Product Name</th>
+                                        <th>Loss Type Name</th>
                                         <th>Status</th>
                                         <th>Chỉnh sửa</th>
                                     </tr>
@@ -64,17 +63,15 @@
                                         {
                                             <tr>
                                                 <td><a href="#">@i</a></td>
-                                                <td>@item.ProductCode</td>
-                                                <td>@item.ProductName</td>
+                                                <td>@item.LossTypeName</td>
                                                 <td>
                                                     <span class="label label-@(item.IsActive == true ? "success":"danger")">
                                                         @(item.IsActive == true ? "Hoạt động" : "Tạm khóa")
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <a class="fa fa-cogs btn-primary btn-sm" href="#" onclick="openModalColor('@item.ProductCode')"></a>
-                                                    <a class="fa fa-edit btn-primary btn-sm" href="#" onclick="openModal('@item.ProductCode')"></a>
-                                                    <a class="fa fa-trash btn-danger btn-sm" href="@Url.Action("ProductDel/"+ item.ProductCode,"Product")" onclick="return confirm('Are you sure?')"> </a>
+                                                    <a class="fa fa-edit btn-primary btn-sm" href="#" onclick="openModal(@item.Id)"></a>
+                                                    <a class="fa fa-trash btn-danger btn-sm" href="@Url.Action("LossTypeDel/"+ item.Id,"LossType")" onclick="return confirm('Are you sure?')"> </a>
                                                 </td>
                                             </tr>
                                             i++;
@@ -82,17 +79,18 @@
                                     }
                                     else
                                     {
-                                        <tr>
-                                            <td colspan="4">
-                                                <div class="callout callout-warning">
-                                                    <h4>Warning!</h4>
-                                                    <p>
-                                                        <b>Data Not Found</b>&nbsp; Không có dữ liệu!
-                                                    </p>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="callout callout-warning">
+                                            <h4>Warning!</h4>
+                                            <p>
+                                                <b>Data Not Found</b>&nbsp; Không có dữ liệu!
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
                                     }
+
                                 </tbody>
                             </table>
                         </div>
@@ -110,9 +108,9 @@
 </div>
 <!-- /.content-wrapper -->
 
-@Html.Partial("_ProductAdd")
+@Html.Partial("_LossTypeAdd")
 
-<!-- #region Edit Product -->
+<!-- #region Edit LossType -->
 <div id='modal-edit' class='modal'>
     <div class="modal-dialog">
         <div class="modal-content">
@@ -121,50 +119,33 @@
     </div>
 </div>
 <!-- #endregion -->
-<!-- #region Edit Product -->
-<div id='modal-color' class='modal'>
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div id='ContentModalColor'></div>
-        </div>
-    </div>
-</div>
-<!-- #endregion -->
 
 @section scripts {
     <script type="text/javascript">
 
-        //Initialize Select2 Elements
-        $(function () {
-            $('.select2').select2();
-        });
-
-        //Code cho function add new Product
-        function ProductAdd(e) {
-            e.preventDefault();
-            var productCode = $("#ProductCode").val();
-            var productName = $("#ProductName").val();
+        //Code cho function add new LossType
+        function LossTypeAdd() {
+            var lossTypeName = $("#lossTypeName").val();
             var isActive = $("#isActive").is(":checked");
             var model = {
-                'ProductCode': productCode,
-                'ProductName': productName,
+                'LossTypeName': lossTypeName,
                 'IsActive' : isActive,
             }; //End of model variable
 
-            if (productCode == null || productCode == "" || productName == null || productName == "") {
+            if (lossTypeName == null || lossTypeName == "") {
                 messages.notify("(*) - Requirement field", "error");
                 return false;
             } //End of If statement
             else {
                 $.ajax({
                     type: "POST",
-                    url: "@(Url.Action("ProductAdd", "Product"))",
+                    url: "@(Url.Action("LossTypeAdd", "LossType"))",
                     content: "application/json; charset =utf-8",
                     dataType: "json",
                     data: model,
                     success: function (data) {
                         if (data == 1) {
-                            messages.notify("Added an product successful!", "success");
+                            messages.notify("Added an lossType successful!", "success");
                             window.location.reload();
                         } //End if Data == 1
 
@@ -183,11 +164,11 @@
                     } //End of error function
                 }); //End of ajax
             } //End of Else statement
-        } //End function ProductAdd
+        } //End function LossTypeAdd
 
         //Code function Open modal
         var openModal = function (Id) {
-            var url = '/Product/ProductUp/' + Id;
+            var url = '/LossType/LossTypeUp/' + Id;
             var options = { "backdrop": "static", keyboard: true };
             $.ajax({
                 type: "GET",
@@ -203,81 +184,31 @@
             }); //End ajax
         } //End function openModal
 
-        //Code function Open modal
-        var openModalColor = function (Id) {
-            var url = '/Product/ProductAddColor/' + Id;
-            var options = { "backdrop": "static", keyboard: true };
-            var options = { "backdrop": "static", keyboard: true };
-            $.ajax({
-                type: "GET",
-                url: url,
-                success: function (data) {
-                    $('#ContentModalColor').html(data);
-                    $('#modal-color').modal(options);
-                    $('#modal-color').modal('show');
-                    $('#ProductCodeUp').val(Id);
-                }, //End function success
-                error: function (e) {
-                    return false;
-                } //End function error
-            }); //End ajax
-        } //End function openModal
-
-        function ProductUpColor(Id) {
-            debugger;
-            var colorCode = $('#colorItem').val();
-            var model = {
-                'arrayId': colorCode,
-                'PId': Id,
-            };
-            $.ajax({
-                type: "POST",
-                url: "@(Url.Action("ProductUpColor", "Product"))",
-                data: model,
-                content: "application/json; charset =utf-8",
-                dataType: "json",
-                success: function (data) {
-                    if (data == 1) {
-                        messages.notify("Edited an product successfull!", "success");
-                        window.location.reload();
-                    }//End if data == 1
-                    else if (data == 0) {
-                        messages.notify("Error has occured while saving data!", "error");
-                        return false;
-                    }//End if data == 0
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    messages.notify("Error has occured while saving data!", "error");
-                    return false;
-                }//End of function error
-            });
-        }
-
-        //Code function edit an Product
-        function ProductUp(Id) {
-            var productName = $("#ProductNameUp").val();
+        //Code function edit an LossType
+        function LossTypeUp(Id) {
+            var lossTypeName = $("#lossTypeNameUp").val();
             var isActive = $("#isActiveUp").is(":checked");
 
             var model = {
-                'ProductCode': Id,
-                'ProductName': productName,
+                'Id': Id,
+                'LossTypeName': lossTypeName,
                 'IsActive': isActive,
             }; //End model
 
-            if (productName == null || productName == "") {
+            if ( lossTypeName == null || lossTypeName == "") {
                 messages.notify("(*) - Requirement field", "error");
                 return false;
             } //End if
             else {
                 $.ajax({
                     type: "POST",
-                    url: "@(Url.Action("ProductUp", "Product"))",
+                    url: "@(Url.Action("LossTypeUp", "LossType"))",
                     content: "application/json; charset =utf-8",
                     dataType: "json",
                     data: model,
                     success: function (data) {
                         if (data == 1) {
-                            messages.notify("Edited an product successfull!", "success");
+                            messages.notify("Edited an lossType successfull!", "success");
                             window.location.reload();
                         }//End if data == 1
                         if (data == -1) {
@@ -294,6 +225,6 @@
                     }//End of function error
                 }); //End ajax
             } //End of else
-        } //End function edit an Product
+        } //End function edit an LossType
     </script>
 }

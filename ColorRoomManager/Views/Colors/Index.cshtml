@@ -27,76 +27,10 @@
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <p>
-            @*@Html.ActionLink("Create New", "CreateColor")*@
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#color-add">
                 Create Color
             </button>
         </p>
-        @*<table class="table">
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ColorCode)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ColorName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ProductCode)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.IsActive)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CreateBy)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CreateTime)
-                    </th>
-                    <th></th>
-                </tr>
-
-                @if (Model != null)
-                {
-                    foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ColorCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ColorName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ColorName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ColorName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ProductCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.IsActive)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CreateBy)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CreateTime)
-                            </td>
-                            <td>
-                                @Html.ActionLink("Edit", "Edit", new { id = item.ColorCode }) |
-                                @Html.ActionLink("Details", "Details", new { id = item.ColorCode }) |
-                                @Html.ActionLink("Delete", "Delete", new { id = item.ColorCode })
-                            </td>
-                        </tr>
-
-                    }
-
-                }
-
-            </table>*@
-
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-info">
@@ -107,7 +41,6 @@
                             <button type="button" class="btn btn-box-tool" data-widget="collapse">
                                 <i class="fa fa-minus"></i>
                             </button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                         </div>
                     </div>
                     <!-- /.box-header -->
@@ -147,15 +80,16 @@
                                     }
                                     else
                                     {
-                                        <tr>
-                                            <td colspan="4">
-                                                <div class="alert alert-warning alert-dismissible">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                                    <h4><i class="icon fa fa-warning"></i> Thông báo!</h4>
-                                                    <h3> Không tìm thấy dữ liệu !</h3>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="callout callout-warning">
+                                            <h4>Warning!</h4>
+                                            <p>
+                                                <b>Data Not Found</b>&nbsp; Không có dữ liệu!
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
                                     }
 
                                 </tbody>

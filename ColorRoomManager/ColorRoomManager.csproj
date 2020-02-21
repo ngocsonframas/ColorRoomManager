@@ -145,10 +145,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ColorsController.cs" />
     <Compile Include="Controllers\CrushingController.cs" />
+    <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LossTypeController.cs" />
     <Compile Include="Controllers\MachineController.cs" />
     <Compile Include="Controllers\MaterialController.cs" />
     <Compile Include="Controllers\MixingController.cs" />
+    <Compile Include="Controllers\MixingOutController.cs" />
     <Compile Include="Controllers\OperatorController.cs" />
     <Compile Include="Controllers\ProductColorsController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
@@ -158,18 +161,18 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Color.cs" />
+    <Compile Include="Models\CrushRaw.cs" />
     <Compile Include="Models\DBContext.cs" />
     <Compile Include="Models\Label.cs" />
     <Compile Include="Models\LossType.cs" />
     <Compile Include="Models\Machine.cs" />
     <Compile Include="Models\Material.cs" />
+    <Compile Include="Models\MixingOut.cs" />
     <Compile Include="Models\MixRaw.cs" />
     <Compile Include="Models\Operator.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductColor.cs" />
-    <Compile Include="Models\Recycle.cs" />
     <Compile Include="Models\Step.cs" />
-    <Compile Include="Models\sysdiagram.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
@@ -180,7 +183,9 @@
     <Compile Include="SerialPort\SerialPortManager.cs" />
     <Compile Include="SerialPort\SerialSettings.cs" />
     <Compile Include="ViewModels\ColorViewModels.cs" />
+    <Compile Include="ViewModels\CrushRawViewModels.cs" />
     <Compile Include="ViewModels\MachineViewModels.cs" />
+    <Compile Include="ViewModels\MixRawViewModels.cs" />
     <Compile Include="ViewModels\ProductViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -7360,8 +7365,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Views\Shared\_MainSidebar.cshtml" />
@@ -7384,6 +7387,12 @@
     <Content Include="Views\Step\Index.cshtml" />
     <Content Include="Views\Step\_StepAdd.cshtml" />
     <Content Include="Views\Step\_StepUp.cshtml" />
+    <Content Include="Views\LossType\Index.cshtml" />
+    <Content Include="Views\LossType\_LossTypeAdd.cshtml" />
+    <Content Include="Views\LossType\_LossTypeUp.cshtml" />
+    <Content Include="Views\History\Mixing.cshtml" />
+    <Content Include="Views\History\Crushing.cshtml" />
+    <Content Include="Views\MixingOut\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

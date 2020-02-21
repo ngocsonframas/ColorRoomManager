@@ -37,8 +37,63 @@
                 </a>
             </li>
             <li>
-                <a href="@Url.Action("Index", "History")">
+                <a href="@Url.Action("Index", "MixingOut")">
+                    <i class="fa fa-balance-scale"></i> <span>Mixing Output</span>
+                </a>
+            </li>
+            <li class="treeview menu-open" style="height: auto;">
+                <a href="#">
                     <i class="fa fa-history"></i> <span>HISTORY</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu" style="display: block;">
+                    <li><a href="@Url.Action("Mixing", "History")"><i class="fa fa-circle-o"></i> Mixing </a></li>
+                    <li><a href="@Url.Action("Crushing", "History")"><i class="fa fa-circle-o"></i> Crushing</a></li>
+                </ul>
+            </li>
+            <li class="header">ADMIN CONTROL</li>
+            <li>
+                <a href="@Url.Action("Index", "Machine")">
+                    <i class="fa fa-circle-o text-warning"></i>
+                    <span>Machine</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Product")">
+                    <i class="fa fa-circle-o text-primary"></i>
+                    <span>Product</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Material")">
+                    <i class="fa fa-circle-o text-blue"></i>
+                    <span>Material</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Colors")">
+                    <i class="fa fa-circle-o text-yellow"></i>
+                    <span>Colors</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Operator")">
+                    <i class="fa fa-circle-o text-success"></i>
+                    <span>Operator</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Step")">
+                    <i class="fa fa-circle-o text-red"></i>
+                    <span>Step</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "LossType")">
+                    <i class="fa fa-circle-o text-olive"></i>
+                    <span>Loss Type</span>
                 </a>
             </li>
         </ul>

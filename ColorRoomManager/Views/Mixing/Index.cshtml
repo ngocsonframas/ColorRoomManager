@@ -30,7 +30,7 @@
     if (ViewBag.ListMachine.Count > 0)
     {
         lstMachine = ViewBag.ListMachine;
-    } 
+    }
     if (ViewBag.ListMaterial.Count > 0)
     {
         lstMaterial = ViewBag.ListMaterial;
@@ -59,21 +59,6 @@
                             <button type="button" class="btn btn-box-tool" data-widget="collapse">
                                 <i class="fa fa-minus"></i>
                             </button>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-wrench"></i>
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="#">Separated link</a></li>
-                                </ul>
-                            </div>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove">
-                                <i class="fa fa-times"></i>
-                            </button>
                         </div>
                     </div>
                     <div class="box-body">
@@ -91,7 +76,7 @@
                                     <label>Operator<code>(*)</code></label>
                                     <select class="form-control select2" id="operator" data-placeholder="Chọn trưởng ca">
                                         <option value=""></option>
-                                        @if (lstOperator.Count > 0)
+                                        @if (lstOperator !=null)
                                         {
                                             foreach (var item in lstOperator)
                                             {
@@ -121,14 +106,14 @@
                                         {
                                             foreach (var item in lstColor)
                                             {
-                                             <option value="@item.ColorCode">@item.ColorCode (@item.ColorName)</option>
+                                                <option value="@item.ColorCode">@item.ColorCode (@item.ColorName)</option>
                                             }
                                         }
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Material Type</label>
-                                    <select class="form-control select2" id="colorCode" data-placeholder="Chọn loại nguyên liệu">
+                                    <select class="form-control select2" id="materialId" data-placeholder="Chọn loại nguyên liệu">
                                         <option value=""></option>
                                         @if (lstMaterial.Count > 0)
                                         {
@@ -156,7 +141,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Machine<code>(*)</code></label>
-                                    <select class="form-control select2" id="machine" data-placeholder="Chọn máy">
+                                    <select class="form-control select2" id="machineName" data-placeholder="Chọn máy">
                                         <option value=""></option>
                                         @if (lstMachine.Count > 0)
                                         {
@@ -169,7 +154,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Raw Material(Kg)<code>(*)</code></label>
-                                    <input type="text" id="rawMaterial" name="RawMaterial" class="form-control changeInput" readonly />
+                                    <input type="text" id="rawMaterial" name="RawMaterial" class="form-control changeInput" value="@ViewBag.Weight"/>
                                 </div>
                                 <div class="form-group">
                                     <label>Recycling Amount(kg)<code>(*)</code></label>
@@ -205,6 +190,11 @@
 
 @section scripts {
     <script type="text/javascript">
+
+        $(document).on("wheel", "input[type=number]", function (e) {
+                $(this).blur();
+        });
+
         $(function () {
             //Call js select2
             $(".select2").select2();
@@ -265,7 +255,7 @@
             });
              });
 
-        function Reset() {
+        function ResetForm(e) {
             //$('#shift').prop('selectedIndex', 0);
             //$("#operator").select2('val', 'All');
             //$("#product").select2('val', 'All');
@@ -278,21 +268,42 @@
             //$("#totalMaterial").val('');
         };
 
-        function Save() {
-            var shift = $("#shift :selected").val();
-            var operator = $("#operator.select2 option:selected").val();
-            var product = $("#product.select2 option:selected").val();
-            var colorCode = $("#colorCode.select2 option:selected").val();
-            var step = $("#step.select2 option:selected").val();
-            var colorName = $("#colorName").val();
+        function Save(e) {
+             e.preventDefault();
+            var shiftName = $("#shift :selected").text();
+            var operatorName = $("#operator.select2 option:selected").text();
+            var machineName = $("#machineName.select2 option:selected").text();
+            var productName = $("#product.select2 option:selected").text();
+            var productCode = $("#product.select2 option:selected").val();
+            var dataArray = $("#colorCode.select2 option:selected").text().split('(');
+            var colorName = dataArray[1].split(')');
+            var materialName = $("#materialId.select2 option:selected").text();
+            var stepName = $("#step.select2 option:selected").text();
             var rawMaterial = $("#rawMaterial").val();
             var recyclingAmount = $("#recyclingAmount").val();
             var totalMaterial = $("#totalMaterial").val();
-            if (shift == "" || operator == "" || product == "" || colorCode == "" || step == "") {
+            if (shiftName == "" || operatorName == "" || productName == ""
+                || colorName == "" || stepName == "" || rawMaterial == ""
+                || recyclingAmount == "" || totalMaterial == "") {
                 messages.notify("Vui lòng điền đầy đủ thông tin các trường có dấu (*)", "error");
                 return false;
             }
             else {
+
+                var model ={
+                    'ShiftName': shiftName,
+                    'OperatorName': operatorName,
+                    'ProductName': productName,
+                    'ProductCode': productCode,
+                    'MachineName': machineName,
+                    'MaterialName': materialName,
+                    'ColorName': colorName,
+                    'StepName': stepName,
+                    'WeightMaterial': rawMaterial,
+                    'WeightRecycle': recyclingAmount,
+                    'TotalMaterial': totalMaterial
+                }
+
                $.ajax({
                 type: "POST",
                 url: "@(Url.Action("MixingAdd", "Mixing"))",
@@ -302,7 +313,6 @@
                 success: function (data) {
                     if (data) {
                         messages.notify("CommandsCompletedSuccessfully", "success");
-                        window.location.reload();
                     }
                 },
                     error: function(xhr, textStatus, errorThrown) {

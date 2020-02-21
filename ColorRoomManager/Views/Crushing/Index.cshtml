@@ -1,12 +1,7 @@
 ﻿
-@{
-    ViewBag.Title = "Index";
-}
-
 @using ColorRoomManager.Models;
 @{
     ViewBag.Title = "MIXING ROOM";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{
     var lstOperator = new List<Operator>();
@@ -15,6 +10,14 @@
     var lstStep = new List<Step>();
     var lstMachine = new List<Machine>();
     var lstMaterial = new List<Material>();
+    var lstLossType = new List<LossType>();
+
+    var lstCrusRaw = (List<MixRaw>)ViewBag.MixRaw;
+
+     if (ViewBag.ListLossType.Count > 0)
+    {
+        lstLossType = ViewBag.ListLossType;
+    }
 
     if (ViewBag.ListOperator.Count > 0)
     {
@@ -90,6 +93,19 @@
                                         <option value="x">Ca làm việc 1(X)</option>
                                         <option value="y">Ca làm việc 2(Y)</option>
                                         <option value="z">Ca làm việc 3(Z)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Loss Type<code>(*)</code></label>
+                                    <select class="form-control select2" id="lossType" data-placeholder="Chọn loss type">
+                                        <option value=""></option>
+                                        @if (lstLossType.Count > 0)
+                                        {
+                                            foreach (var item in lstLossType)
+                                            {
+                                                <option value="@item.Id">@item.LossTypeName</option>
+                                            }
+                                        }
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -173,6 +189,19 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
+                                    <label>QR CODE<code>(*)</code></label>
+                                    <select class="form-control select2" id="MixRawId" data-placeholder="Chọn mã QR CODE">
+                                        <option value=""></option>>
+                                        @if (lstCrusRaw !=null)
+                                        {
+                                            foreach (var item in lstCrusRaw)
+                                            {
+                                                <option value="@item.MixRawId">@item.MixBacode</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label>Raw Material(Kg)<code>(*)</code></label>
                                     <input type="text" id="rawMaterial" name="RawMaterial" class="form-control changeInput" readonly />
                                 </div>
@@ -186,17 +215,17 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <a class="btn btn-lg btn-primary" onclick="Scales()">
+                                <a class="btn btn-lg btn-primary" onclick="Scales(event)">
                                     <i class="fa fa-barcode"></i> Print
                                 </a>
                             </div>
                             <div class="col-md-2">
-                                <a class="btn btn-lg btn-danger" onclick="Reset()">
+                                <a class="btn btn-lg btn-danger" onclick="ResetForm(event)">
                                     <i class="fa fa-repeat"></i> Reset
                                 </a>
                             </div>
                             <div class="col-md-2">
-                                <a class="btn btn-lg btn-success" onclick="Save()">
+                                <a class="btn btn-lg btn-success" onclick="Save(event)">
                                     <i class="fa fa-save"></i> Save
                                 </a>
                             </div>
@@ -226,24 +255,6 @@
                     $("#totalMaterial").val(totalMaterial);
                 }
             });
-
-            @*$('#colorCode').on('select2:select', function (e) {
-                var data = e.params.data;
-                $.ajax({
-                type: "POST",
-                url: "@(Url.Action("ColorNameByCode", "Mixing"))",
-                content: "application/json; charset =utf-8",
-                    dataType: "json",
-                    data: { colorCode: data.id },
-                    success: function (d) {
-                        $("#colorName").val(d.ColorName);
-                  },
-                error: function (xhr, textStatus, errorThrown) {
-                   alert("Đã xảy ra lỗi trong quá trình thực thi");
-                    return false;
-                }
-            });
-        });*@
         });
 
          $('#product').on('select2:select', function (e) {
@@ -270,20 +281,22 @@
             });
              });
 
-        function Reset() {
-            //$('#shift').prop('selectedIndex', 0);
-            //$("#operator").select2('val', 'All');
-            //$("#product").select2('val', 'All');
-            //$("#colorCode").select2('val', 'All');
-            //$("#step").select2('val', 'All');
-            //$("#machine").select2('val', 'All');
-            //$("#colorName").val('');
-            //$("#rawMaterial").val('');
-            //$("#recyclingAmount").val('');
-            //$("#totalMaterial").val('');
+        function Reset(e) {
+             e.preventDefault();
+            $('#shift').prop('selectedIndex', 0);
+            $("#operator").select2('val', 'All');
+            $("#product").select2('val', 'All');
+            $("#colorCode").select2('val', 'All');
+            $("#step").select2('val', 'All');
+            $("#machine").select2('val', 'All');
+            $("#colorName").val('');
+            $("#rawMaterial").val('');
+            $("#recyclingAmount").val('');
+            $("#totalMaterial").val('');
         };
 
-        function Save() {
+        function Save(e) {
+             e.preventDefault();
             var shift = $("#shift :selected").val();
             var operator = $("#operator.select2 option:selected").val();
             var product = $("#product.select2 option:selected").val();
@@ -293,11 +306,30 @@
             var rawMaterial = $("#rawMaterial").val();
             var recyclingAmount = $("#recyclingAmount").val();
             var totalMaterial = $("#totalMaterial").val();
-            if (shift == "" || operator == "" || product == "" || colorCode == "" || step == "") {
+            var mixRawId = $("#MixRawId.select2 option:selected").val();
+            var lossTypeName = $("#lossType.select2 option:selected").text();
+            if (shift == "" || operator == "" || product == "" || colorCode == "" || step == "" || mixRawId == "" || lossTypeName =="") {
                 messages.notify("Vui lòng điền đầy đủ thông tin các trường có dấu (*)", "error");
                 return false;
             }
             else {
+                var model ={
+                    'ShiftName': shiftName,
+                    'OperatorName': operatorName,
+                    'ProductName': productName,
+                    'ProductCode': productCode,
+                    'MachineName': machineName,
+                    'MaterialName': materialName,
+                    'ColorName': colorName,
+                    'StepName': stepName,
+                    'WeightMaterial': rawMaterial,
+                    'WeightRecycle': recyclingAmount,
+                    'TotalMaterial': totalMaterial,
+                    'MixRawId': mixRawId,
+                    'LossTypeName':lossTypeName ,
+
+                }
+
                $.ajax({
                 type: "POST",
                 url: "@(Url.Action("MixingAdd", "Mixing"))",
@@ -318,23 +350,8 @@
             }
         };
 
-        @*$("#rawMaterial").focus(function () {
-
-            $.ajax({
-                type: "GET",
-                url: "@(Url.Action("Scales", "Mixing"))",
-                success: function (data) {
-                    console.log(data);
-                    $("#rawMaterial").val(data);
-                  },
-                error: function (xhr, textStatus, errorThrown) {
-                   alert("Đã xảy ra lỗi trong quá trình thực thi");
-                    return false;
-                }
-            });
-        });*@
-
-        function Scales() {
+        function Scales(e) {
+             e.preventDefault();
             $.ajax({
                 type: "GET",
                 url: "@(Url.Action("Scales", "Mixing"))",

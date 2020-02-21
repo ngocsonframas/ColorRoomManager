@@ -41,7 +41,7 @@
                             {
                                 if (lstProductColor != null)
                                 {
-                                    if (lstProductColor.Where(x => x.ColorCode == item.ColorCode).ToList().Count > 0)
+                                    if (lstProductColor.Where(x => x.ColorCode.Trim() == item.ColorCode.Trim()).ToList().Count > 0)
                                     {
                                         <option selected value='@item.ColorCode'>@item.ColorName</option>
                                     }
@@ -66,7 +66,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="ProductUpColor('')">Save changes</button>
+                    <button type="button" class="btn btn-primary" onclick="ProductUpColor(@productCode)">Save changes</button>
                 </div>
             </div>
         }
