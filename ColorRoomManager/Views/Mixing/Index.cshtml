@@ -36,6 +36,8 @@
         lstMaterial = ViewBag.ListMaterial;
     }
 
+    string weight =(string)ViewBag.Weight;
+
 }
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -154,7 +156,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Raw Material(Kg)<code>(*)</code></label>
-                                    <input type="text" id="rawMaterial" name="RawMaterial" class="form-control changeInput" value="@ViewBag.Weight"/>
+                                    <input type="text" id="rawMaterial" name="RawMaterial" class="form-control changeInput" value="@weight"/>
                                 </div>
                                 <div class="form-group">
                                     <label>Recycling Amount(kg)<code>(*)</code></label>
@@ -166,7 +168,7 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <a class="btn btn-lg btn-primary" onclick="Scales()">
+                                <a class="btn btn-lg btn-primary" href="@Url.Action("PrintMix", "Mixing")">
                                     <i class="fa fa-barcode"></i> Print
                                 </a>
                             </div>
@@ -192,13 +194,14 @@
     <script type="text/javascript">
 
         $(document).on("wheel", "input[type=number]", function (e) {
-                $(this).blur();
+            $(this).blur();
+            console.log("WEIGHT"@weight);
+             $("#rawMaterial").val(@weight);
         });
 
         $(function () {
             //Call js select2
             $(".select2").select2();
-
             //onchange event for input
             $(".changeInput:input").bind('keyup mouseup', function () {
                 var material = $("#rawMaterial").val();

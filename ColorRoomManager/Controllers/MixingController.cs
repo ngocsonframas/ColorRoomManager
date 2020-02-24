@@ -1,22 +1,17 @@
 ﻿using ColorRoomManager.Models;
+using ColorRoomManager.Reports.Object;
 using ColorRoomManager.ViewModels;
-using SerialPortListener.Serial;
 using System;
-using System.Collections.Generic;
-using System.IO.Ports;
 using System.Linq;
-using System.Management;
-using System.Text;
-using System.Threading;
-using System.Timers;
-using System.Web;
 using System.Web.Mvc;
 
 namespace ColorRoomManager.Controllers
 {
     public class MixingController : Controller
     {
-        DBContext db = new DBContext();
+        private DBContext db = new DBContext();
+        private ScannerInfo _ScannerInfo;
+
         // GET: Mixing
         public ActionResult Index()
         {
@@ -34,18 +29,12 @@ namespace ColorRoomManager.Controllers
             ViewBag.ListMachine = ltsMachine;
             ViewBag.ListMaterial = ltsMaterial;
 
-            SerialPort serialPort = new SerialPort("COM1");
-            string strData = string.Empty;
-            string _Weight = string.Empty;
-
-            if (serialPort.IsOpen == false)
+            foreach (string key in HttpContext.Request.Form.AllKeys)
             {
-                serialPort.Open();
-                strData = serialPort.ReadExisting();
-                _Weight = _Weight + strData;
+                string value = HttpContext.Request.Form.Get(key);
+                ViewBag.Weight = value;
             }
-            ViewBag.Weight = _Weight.Trim();
-            serialPort.Close();
+
             return View();
         }
 
@@ -54,24 +43,24 @@ namespace ColorRoomManager.Controllers
             bool status = false;
             if (models != null)
             {
-                string guidResult = Guid.NewGuid().ToString().ToUpper().Substring(1,5);
+                string guidResult = Guid.NewGuid().ToString().ToUpper().Substring(1, 5);
                 guidResult = guidResult.Replace("-", string.Empty);
-                string barCode = ("MI" +DateTime.Today.Year+ DateTime.Today.Month + DateTime.Today.Day + guidResult + models.ProductCode).ToString();
+                string barCode = ("MI" + DateTime.Today.Year + DateTime.Today.Month + DateTime.Today.Day+DateTime.Today.Minute + guidResult + models.ProductCode).ToString();
                 MixRaw mixRaw = new MixRaw
                 {
-                    ShiftName      = models.ShiftName.Trim(),
-                    OperatorName   = models.OperatorName.Trim(),
-                    ProductName    = models.ProductName.Trim(),
-                    MachineName    = models.MachineName,
-                    ColorName      = models.ColorName.Trim(),
-                    MaterialName   = models.MaterialName.Trim(),
-                    StepName       = models.StepName.Trim(),
+                    ShiftName = models.ShiftName.Trim(),
+                    OperatorName = models.OperatorName.Trim(),
+                    ProductName = models.ProductName.Trim(),
+                    MachineName = models.MachineName,
+                    ColorName = models.ColorName.Trim(),
+                    MaterialName = models.MaterialName.Trim(),
+                    StepName = models.StepName.Trim(),
                     WeightMaterial = models.WeightMaterial,
-                    WeightRecycle  = models.WeightRecycle,
-                    MixBacode      = barCode,
-                    TotalMaterial  = models.TotalMaterial,
-                    CreateBy       = User.Identity.Name,
-                    CreateTime     = DateTime.Now,
+                    WeightRecycle = models.WeightRecycle,
+                    MixBacode = barCode,
+                    TotalMaterial = models.TotalMaterial,
+                    CreateBy = User.Identity.Name,
+                    CreateTime = DateTime.Now,
                 };
                 try
                 {
@@ -84,7 +73,6 @@ namespace ColorRoomManager.Controllers
                     ex.ToString();
                 }
             }
-            
 
             return Json(status, JsonRequestBehavior.AllowGet);
         }
@@ -108,22 +96,28 @@ namespace ColorRoomManager.Controllers
             return Json(lstCode, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult Scales()
+        public ActionResult PrintMix()
         {
-            SerialPort serialPort = new SerialPort("COM1");
-            string strData = string.Empty;
-            string _Weight = string.Empty;
+            var ListItem = db.MixRaws.Where(x => x.MixRawId == 8)
+                .Select(x => new LabelTemplate
+                {
+                    ColorName = x.ColorName,
+                    MaterialName = x.MaterialName,
+                    ScaleWeight = x.WeightMix,
+                    LabelName = "MIXING (TRỘN)",
+                    Barcode = x.MixBacode
+                }).ToList();
 
-            if (!serialPort.IsOpen)
-            {
-                serialPort.Open();
-                strData = serialPort.ReadExisting();
-                _Weight = _Weight + strData;
-                _Weight = _Weight.Trim();
-            }
-
-            serialPort.Close();
-            return Json(_Weight, JsonRequestBehavior.AllowGet);
+            _ScannerInfo = new ScannerInfo();
+            var MyReader = new System.Configuration.AppSettingsReader();
+            string print = string.Empty;
+            print = MyReader.GetValue("Printer_White", typeof(string)).ToString();
+            //rptMixing rpt = new rptMixing();
+            //rpt.CreateDocument(false);
+            //rpt.Load(ListItem);
+            //rpt.PrinterName = print;
+            //rpt.Dispose();
+            return View();
         }
     }
 }

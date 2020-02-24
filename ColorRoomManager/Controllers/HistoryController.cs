@@ -1,4 +1,5 @@
 ﻿using ColorRoomManager.Models;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace ColorRoomManager.Controllers
     public class HistoryController : Controller
     {
 
-        DBContext db = new DBContext();
+      private  DBContext db = new DBContext();
 
         // GET: History
         public ActionResult Index()
@@ -18,24 +19,46 @@ namespace ColorRoomManager.Controllers
             return View();
         }
 
-        public ActionResult Mixing()
+        public ActionResult Mixing(int page = 1, string searchString = "")
         {
-            var data = db.MixRaws.ToList();
-            if (data.Count> 0)
+            ViewBag.Page = (page - 1) * 15;
+            ViewBag.SearchString = searchString;
+            IPagedList result;
+
+            if (!String.IsNullOrEmpty(searchString))
             {
-                return View(data);
+                result =db.MixRaws.Where(x=>(x.MixBacode.Contains(searchString) || x.ProductName.Contains(searchString))).OrderByDescending(x => x.CreateTime).ToPagedList(page, 15);
             }
-            return View();
+            else
+            {
+                result = db.MixRaws.OrderByDescending(x => x.CreateTime).ToPagedList(page, 15);
+            }
+            if (result == null)
+            {
+                return HttpNotFound();
+            }
+            return View(result);
         }
 
-        public ActionResult Crushing()
+        public ActionResult Crushing(int page = 1, string searchString = "")
         {
-            var data = db.CrushRaws.ToList();
-            if (data.Count > 0)
+            ViewBag.Page = (page - 1) * 15;
+            ViewBag.SearchString = searchString;
+            IPagedList result;
+
+            if (!String.IsNullOrEmpty(searchString))
             {
-                return View(data);
+                result = db.CrushRaws.Where(x => (x.MixBacode.Contains(searchString) || x.ProductName.Contains(searchString))).OrderByDescending(x => x.CreateTime).ToPagedList(page, 15);
             }
-            return View();
+            else
+            {
+                result = db.CrushRaws.OrderByDescending(x => x.CreateTime).ToPagedList(page, 15);
+            }
+            if (result == null)
+            {
+                return HttpNotFound();
+            }
+            return View(result);
         }
     }
 }

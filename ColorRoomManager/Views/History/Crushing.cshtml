@@ -1,10 +1,12 @@
-﻿
+﻿@using ColorRoomManager.Models
+@using PagedList.Mvc;
 @{
     ViewBag.Title = "Crushing";
 }
 @using ColorRoomManager.Models
 @{
-    var lstCrusRaw = (List<CrushRaw>) Model;
+    int num = ViewBag.Page;
+    @model PagedList.IPagedList<CrushRaw>
 }
 
 <div class="content-wrapper">
@@ -24,91 +26,106 @@
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-            <div class="col-md-12">
-                <div class="box box-info" style="overflow-x: scroll;">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Latest Orders</h3>
-
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
-                            </button>
+            @using (Html.BeginForm("Crushing", "History"))
+            {
+                <div class="col-md-12">
+                    <div class="box box-info" style="overflow-x: scroll;">
+                        <div class="box-header with-border">
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                            <div>
+                                <div class="input-group input-group-sm hidden-xs" style="width: 200px;">
+                                    <input type="text" id="SearchString" name="SearchString" class="form-control pull-right" placeholder="Search QR Code" value="@(ViewBag.SearchString !=string.Empty? ViewBag.SearchString: string.Empty)">
+                                    <div class="input-group-btn">
+                                        <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        <div class="table-responsive">
-                            <table class="table no-margin">
-                                <thead>
-                                    <tr>
-                                        <th style="width:27px">Num</th>
-                                        <th>Machine Name</th>
-                                        <th>Shift Name</th>
-                                        <th>Operator Name</th>
-                                        <th>Loss Type Name</th>
-                                        <th>Product Name</th>
-                                        <th>Material Name</th>
-                                        <th>Color Name</th>
-                                        <th>Step Name</th>
-                                        <th>Weight Mix</th>
-                                        <th>Weight Recycle</th>
-                                        <th>Weight Material</th>
-                                        <th>Total Material</th>
-                                        <th>Mix Bacode</th>
-                                        <th>Details</th>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="table-responsive">
+                                <table class="table no-margin">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:27px">Num</th>
+                                            <th>Machine Name</th>
+                                            <th>Shift Name</th>
+                                            <th>Operator Name</th>
+                                            <th>Loss Type Name</th>
+                                            <th>Product Name</th>
+                                            <th>Material Name</th>
+                                            <th>Color Name</th>
+                                            <th>Step Name</th>
+                                            <th>Weight Mix</th>
+                                            <th>Weight Recycle</th>
+                                            <th>Weight Material</th>
+                                            <th>Total Material</th>
+                                            <th>Mix Bacode</th>
+                                            <th>Details</th>
 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (lstCrusRaw != null)
-                                    {
-                                        int i = 1;
-                                        foreach (var item in lstCrusRaw)
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model != null)
+                                        {
+                                            foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td><a href="#">@(num += 1)</a></td>
+                                                    <td>@item.MachineName</td>
+                                                    <td>@item.ShiftName</td>
+                                                    <td>@item.OperatorName</td>
+                                                    <td>@item.ProductName</td>
+                                                    <td>@item.LossTypeName</td>
+                                                    <td>@item.MaterialName</td>
+                                                    <td>@item.ColorName</td>
+                                                    <td>@item.StepName>
+                                                    <td>@item.WeightMix</td>
+                                                    <td>@item.WeightRecycle</td>
+                                                    <td>@item.WeightMaterial</td>
+                                                    <td>@item.TotalMaterial</td>
+                                                    <td>@item.MixBacode</td>
+                                                    <td>
+                                                        <span class="label label-info">
+                                                            @item.CreateBy - @(item.CreateTime.HasValue ? item.CreateTime.Value.ToString("dd/MM/yyyy") : string.Empty)
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
                                         {
                                             <tr>
-                                                <td><a href="#">@i</a></td>
-                                                <td>@item.MachineName</td>
-                                                <td>@item.ShiftName</td>
-                                                <td>@item.OperatorName</td>
-                                                <td>@item.ProductName</td>
-                                                <td>@item.LossTypeName</td>
-                                                <td>@item.MaterialName</td>
-                                                <td>@item.ColorName</td>
-                                                <td>@item.StepName>
-                                                <td>@item.WeightMix</td>
-                                                <td>@item.WeightRecycle</td>
-                                                <td>@item.WeightMaterial</td>
-                                                <td>@item.TotalMaterial</td>
-                                                <td>@item.MixBacode</td>
-                                                <td>
-                                                    <span class="label label-info">
-                                                        @item.CreateBy - @item.CreateTime.Value.ToString("dd/MM/yyyy")
-                                                    </span>
+                                                <td colspan="15">
+                                                    <div class="callout callout-warning">
+                                                        <h4>Warning!</h4>
+
+                                                        <p>
+                                                            <b>Data Not Found</b>&nbsp; Không có dữ liệu!
+                                                        </p>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         }
-                                    }
-                                    else
-                                    {
-                                        <tr>
-                                            <td colspan="15">
-                                                <div class="callout callout-warning">
-                                                    <h4>Warning!</h4>
-
-                                                    <p>
-                                                        <b>Data Not Found</b>&nbsp; Không có dữ liệu!
-                                                    </p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
                         </div>
-                        <!-- /.table-responsive -->
+
+                        <div class="box-footer">
+                            @if (Model.PageCount > 1)
+                            {
+                                @Html.PagedListPager(Model, page => Url.Action("Crushing", new { page }))
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
         </div>
     </section>
     <!-- /.content -->
