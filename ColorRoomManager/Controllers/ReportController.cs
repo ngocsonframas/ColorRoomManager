@@ -16,12 +16,13 @@ namespace ColorRoomManager.Controllers
         // GET: Report
         public ActionResult Index(string strQr)
         {
-            rptCrushing rpt = new rptCrushing();
-            DataTable dt = DataOperation.getDataTable(GlobalVariable.DBContext, strQr);
-            rpt.DataSource = dt;
-            rpt.DataMember = "dt";
+            //rptCrushing rpt = new rptCrushing();
+            //DataTable dt = DataOperation.getDataTable(GlobalVariable.DBContext, strQr);
+            //rpt.DataSource = dt;
+            //rpt.DataMember = "dt";
             // CheckCookie and ChangeLanguage always have in action (it pass data to View)
-            return View(rpt);
+            //return View(rpt);
+            return View();
         }
     }
 }

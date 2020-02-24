@@ -172,6 +172,7 @@
     <Compile Include="Controllers\OperatorController.cs" />
     <Compile Include="Controllers\ProductColorsController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\StepController.cs" />
     <Compile Include="Extentions\DataOperation.cs" />
     <Compile Include="Extentions\GlobalVariable.cs" />

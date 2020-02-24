@@ -92,7 +92,7 @@ namespace ColorRoomManager.Controllers
 
         public JsonResult ColorCodeByProduct(string prodCode)
         {
-            var lstCode = db.Colors.Where(x => x.ProductCode == prodCode).ToList();
+            var lstCode = db.ProductColors.Where(x => x.ProductCode == prodCode).ToList();
             return Json(lstCode, JsonRequestBehavior.AllowGet);
         }
 
